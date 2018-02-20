@@ -336,33 +336,32 @@ class AlphaBetaPlayer(IsolationPlayer):
             (-1, -1) if there are no available legal moves.
         """
         self.time_left = time_left
-
-        if self.time_left() < self.TIMER_THRESHOLD:
-            raise SearchTimeout()
-
-        depth = self.search_depth
+        # Initialize the best move so that this function returns something
+        # in case the search fails due to timeout
         best_move = (-1, -1)
+        depth = self.search_depth
         moves = game.get_legal_moves()
-        best_score = float("-inf")
 
         if len(moves) > 0:
-            depth_best_move = moves[0]
+            best_move = moves[0]
         else:
             return best_move
-
         try:
+            # The try/except block will automatically catch the exception
+            # raised when the timer is about to expire.
             while True:
-                for m in moves:
-                    if self.time_left() < self.TIMER_THRESHOLD:
-                        raise SearchTimeout()
-                    v = self._min_value(game.forecast_move(m), depth - 1)
-                    if v > best_score:
-                        best_score = v
-                        best_move = m
-                depth_best_move = best_move
+                best_move = self.alphabeta(game, depth)
                 depth += 1
+                # if game.utility(self) == 0:
+                #     depth += 1
+                # else:
+                #     print(depth)
+                #     return best_move
+
         except SearchTimeout:
-            return depth_best_move
+            print(depth)
+            return best_move  # Handle any actions required after timeout as needed
+
 
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf")):
         """Implement depth-limited minimax search with alpha-beta pruning as
@@ -409,33 +408,31 @@ class AlphaBetaPlayer(IsolationPlayer):
                 each helper function or else your agent will timeout during
                 testing.
         """
-        self.time_left = time_left
 
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        depth = self.search_depth
         best_move = (-1, -1)
         moves = game.get_legal_moves()
         best_score = float("-inf")
 
         if len(moves) > 0:
-            depth_best_move = moves[0]
+            best_move = moves[0]
         else:
             return best_move
 
         try:
-            while True:
-                for m in moves:
-                    if self.time_left() < self.TIMER_THRESHOLD:
-                        raise SearchTimeout()
-                    v = self._min_value(game.forecast_move(m), depth - 1)
-                    if v > best_score:
-                        best_score = v
-                        best_move = m
-                depth_best_move = best_move
-                depth += 1
+
+            for m in moves:
+                if self.time_left() < self.TIMER_THRESHOLD:
+                    raise SearchTimeout()
+                v = self._min_value(game.forecast_move(m), depth - 1)
+                if v > best_score:
+                    best_score = v
+                    best_move = m
+            return best_move
+
         except SearchTimeout:
-            return depth_best_move
+            return best_move
 
 

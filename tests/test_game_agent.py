@@ -26,6 +26,7 @@ class IsolationTest(unittest.TestCase):
         winner, history, outcome = self.game.play()
         print(history)
         print(winner)
+        print(outcome)
 
 
 if __name__ == '__main__':
