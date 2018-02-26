@@ -64,7 +64,7 @@ def custom_score(game, player):
     if progress > .6:
         return float((own_moves - 4 * opp_moves))
     else:
-        return float((own_moves - 4 * opp_moves) - center)
+        return float((own_moves - 4 * opp_moves) - (center * .5))
 
 
 
@@ -281,7 +281,7 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         best_score = float("-inf")
-        best_move = None
+        best_move = (-1, -1)
         try:
             for m in game.get_legal_moves():
                 if self.time_left() < self.TIMER_THRESHOLD:
@@ -342,6 +342,7 @@ class AlphaBetaPlayer(IsolationPlayer):
     def get_move(self, game, time_left):
 
         self.time_left = time_left
+
         # Initialize the best move so that this function returns something
         # in case the search fails due to timeout
         depth = 1
@@ -377,10 +378,6 @@ class AlphaBetaPlayer(IsolationPlayer):
         best_move = None
         moves = game.get_legal_moves()
         best_score = float("-inf")
-        #if len(moves) > 0:
-        #    best_move = moves[0]
-        #else:
-        #    return best_move
 
         try:
 
