@@ -57,9 +57,12 @@ def custom_score(game, player):
 
     own_moves = len(game.get_legal_moves(player))
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+
+    # euclidean distance to center of board
     center = _distance_2_center(game, game.get_player_location(player))
+
+    # returns a decimal between 0 and 1: move_count /  board_size
     progress = _game_progression(game)
-    #print(center)
     # as the game advances, the distance to center is not as important, as there are lots of squares disabled
     if progress > .61:
         return float((own_moves - 4 * opp_moves))
@@ -125,6 +128,12 @@ def custom_score_3(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+
     # defensive move, always stay near the center
     return -1 * (_distance_2_center(game, game.get_player_location(player)))
 
