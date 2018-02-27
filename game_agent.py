@@ -64,7 +64,7 @@ def custom_score(game, player):
     if progress > .61:
         return float((own_moves - 4 * opp_moves))
     else:
-        return float((own_moves - 4 * opp_moves) - (center * .5))
+        return float((own_moves - 4 * opp_moves) - (center))
 
 
 
@@ -281,7 +281,11 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         best_score = float("-inf")
-        best_move = (-1, -1)
+        moves = game.get_legal_moves()
+        if len(moves) > 0:
+            best_move = moves[0]
+        else:
+            best_move = (-1, -1)
         try:
             for m in game.get_legal_moves():
                 if self.time_left() < self.TIMER_THRESHOLD:
