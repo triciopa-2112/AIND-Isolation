@@ -61,7 +61,7 @@ def custom_score(game, player):
     progress = _game_progression(game)
     #print(center)
     # as the game advances, the distance to center is not as important, as there are lots of squares disabled
-    if progress > .6:
+    if progress > .61:
         return float((own_moves - 4 * opp_moves))
     else:
         return float((own_moves - 4 * opp_moves) - (center * .5))
